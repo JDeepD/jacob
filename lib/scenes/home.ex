@@ -7,31 +7,6 @@ defmodule Jacob.Scene.Home do
   @grid_width 500 / @cell_size
   @grid_height 500 / @cell_size
 
-  @oscillators %{
-    {4, 3} => :alive,
-    {5, 3} => :alive,
-    {6, 3} => :alive
-  }
-
-  @glider %{
-    {2, 1} => :alive,
-    {3, 2} => :alive,
-    {1, 3} => :alive,
-    {2, 3} => :alive,
-    {3, 3} => :alive
-  }
-
-  @diehard %{
-    {1, 2} => :alive,
-    {2, 2} => :alive,
-    {2, 3} => :alive,
-
-    {7, 3} => :alive,
-    {8, 3} => :alive,
-    {9, 3} => :alive,
-    {8, 1} => :alive
-  }
-
   @impl Scenic.Scene
   def init(scene, _param, _opts) do
     :timer.send_interval(150, :tick)
@@ -85,14 +60,6 @@ defmodule Jacob.Scene.Home do
       {x - 1, y},                     {x + 1, y},
       {x - 1, y + 1}, {x, y + 1}, {x + 1, y + 1}
     ]
-  end
-
-  defp spawn_inside_bounds(board, {x, y} = coord)
-    when x >= 0 and x < @grid_width and y >= 0 and y < @grid_height do
-      Map.put(board, coord, :alive)
-  end
-  defp spawn_inside_bounds(board, _out_of_bounds_coord) do
-    board
   end
 
   defp render(scene) do
