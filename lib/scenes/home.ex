@@ -3,9 +3,9 @@ defmodule Jacob.Scene.Home do
   alias Scenic.Graph
   import Scenic.Primitives
 
-  @cell_size 20
-  @grid_width 40
-  @grid_height 30
+  @cell_size 15
+  @grid_width 500 / @cell_size
+  @grid_height 500 / @cell_size
 
   @oscillators %{
     {4, 3} => :alive,
@@ -34,9 +34,13 @@ defmodule Jacob.Scene.Home do
 
   @impl Scenic.Scene
   def init(scene, _param, _opts) do
-    :timer.send_interval(90, :tick)
+    :timer.send_interval(150, :tick)
+    pattern_path = Path.join(["patterns", "glider.txt"])
+    pattern_string = File.read!(pattern_path)
+    IO.puts("Loaded pattern:\n#{pattern_string}")
+    initial_board = parse_pattern(pattern_string)
 
-    initial_board = @diehard
+    # initial_board = @diehard
     scene =
       scene
       |> assign(board: initial_board)
@@ -52,6 +56,13 @@ defmodule Jacob.Scene.Home do
     {:noreply, scene}
   end
 
+  defp parse_pattern(text) do
+    lines = String.split(String.trim(text), "\n")
+    for {line, y} <- Enum.with_index(lines), {char, x} <- Enum.with_index(String.graphemes(line)), char == "O", into: %{} do
+      {{x, y}, :alive}
+    end
+  end
+
   defp next_generation(board) do
     board
       |> Map.keys()
@@ -60,7 +71,8 @@ defmodule Jacob.Scene.Home do
       |> Enum.reduce(%{}, fn {coord, alive_count}, new_board ->
         is_alive = Map.has_key?(board, coord)
         if alive_count == 3 || (alive_count == 2 && is_alive) do
-          spawn_inside_bounds(new_board, coord)
+          Map.put(new_board, coord, :alive)
+          # spawn_inside_bounds(new_board, coord)
         else
           new_board
         end
@@ -85,8 +97,6 @@ defmodule Jacob.Scene.Home do
 
   defp render(scene) do
     board = scene.assigns.board
-    total_width = @grid_width * @cell_size
-    total_height = @grid_height * @cell_size
 
     base_graph =
       Graph.build()
@@ -102,7 +112,6 @@ defmodule Jacob.Scene.Home do
           translate: {x * @cell_size, y * @cell_size}
         )
       end)
-        |> rect({total_width, total_height}, stroke: {4, :white})
 
     push_graph(scene, graph)
   end
