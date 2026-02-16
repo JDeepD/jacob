@@ -4,21 +4,22 @@ defmodule Jacob.Scene.Home do
   import Scenic.Primitives
 
   @cell_size 20
-  @grid_width 30
+  @grid_width 40
   @grid_height 30
+
+  @glider %{
+    {2, 1} => :alive,
+    {3, 2} => :alive,
+    {1, 3} => :alive,
+    {2, 3} => :alive,
+    {3, 3} => :alive
+  }
 
   @impl Scenic.Scene
   def init(scene, _param, _opts) do
     :timer.send_interval(120, :tick)
 
-    initial_board = %{
-      {2, 1} => :alive,
-      {3, 2} => :alive,
-      {1, 3} => :alive,
-      {2, 3} => :alive,
-      {3, 3} => :alive
-    }
-
+    initial_board = @glider
     scene =
       scene
       |> assign(board: initial_board)
@@ -42,12 +43,7 @@ defmodule Jacob.Scene.Home do
       |> Enum.reduce(%{}, fn {coord, alive_count}, new_board ->
         is_alive = Map.has_key?(board, coord)
         if alive_count == 3 || (alive_count == 2 && is_alive) do
-          {x, y} = coord
-          if x >= 0 && x < @grid_width && y >= 0 && y < @grid_height do
-            Map.put(new_board, coord, :alive)
-          else
-            new_board
-          end
+          spawn_inside_bounds(new_board, coord)
         else
           new_board
         end
@@ -60,6 +56,14 @@ defmodule Jacob.Scene.Home do
       {x - 1, y},                     {x + 1, y},
       {x - 1, y + 1}, {x, y + 1}, {x + 1, y + 1}
     ]
+  end
+
+  defp spawn_inside_bounds(board, {x, y} = coord)
+    when x >= 0 and x < @grid_width and y >= 0 and y < @grid_height do
+      Map.put(board, coord, :alive)
+  end
+  defp spawn_inside_bounds(board, _out_of_bounds_coord) do
+    board
   end
 
   defp render(scene) do
