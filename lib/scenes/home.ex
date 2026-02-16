@@ -7,6 +7,12 @@ defmodule Jacob.Scene.Home do
   @grid_width 40
   @grid_height 30
 
+  @oscillators %{
+    {4, 3} => :alive,
+    {5, 3} => :alive,
+    {6, 3} => :alive
+  }
+
   @glider %{
     {2, 1} => :alive,
     {3, 2} => :alive,
@@ -19,7 +25,7 @@ defmodule Jacob.Scene.Home do
   def init(scene, _param, _opts) do
     :timer.send_interval(120, :tick)
 
-    initial_board = @glider
+    initial_board = @oscillators
     scene =
       scene
       |> assign(board: initial_board)
