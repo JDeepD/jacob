@@ -23,3 +23,6 @@ mix scenic.run -- <pattern>.txt
 
 # Diehard
 ![diehard](https://github.com/user-attachments/assets/71d6cda5-8741-49a0-99f2-a61933d8bfdf)
+
+# Vacuum Gun
+![Screen Recording 2026-02-16 at 5 42 48 PM](https://github.com/user-attachments/assets/ddfadf77-aabd-452d-ac57-b9fc5b42cb8e)
