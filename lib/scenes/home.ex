@@ -9,8 +9,10 @@ defmodule Jacob.Scene.Home do
 
   @impl Scenic.Scene
   def init(scene, _param, _opts) do
+    args = System.argv()
+    filename = Enum.at(args, 0)
     :timer.send_interval(150, :tick)
-    pattern_path = Path.join(["patterns", "vacuum-gun.txt"])
+    pattern_path = Path.join(["patterns", filename])
     pattern_string = File.read!(pattern_path)
     IO.puts("Loaded pattern:\n#{pattern_string}")
     initial_board = parse_pattern(pattern_string)
