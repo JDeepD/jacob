@@ -3,14 +3,14 @@ defmodule Jacob.Scene.Home do
   alias Scenic.Graph
   import Scenic.Primitives
 
-  @cell_size 15
+  @cell_size 8
   @grid_width 500 / @cell_size
   @grid_height 500 / @cell_size
 
   @impl Scenic.Scene
   def init(scene, _param, _opts) do
     :timer.send_interval(150, :tick)
-    pattern_path = Path.join(["patterns", "glider.txt"])
+    pattern_path = Path.join(["patterns", "vacuum-gun.txt"])
     pattern_string = File.read!(pattern_path)
     IO.puts("Loaded pattern:\n#{pattern_string}")
     initial_board = parse_pattern(pattern_string)
