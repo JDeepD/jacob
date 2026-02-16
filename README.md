@@ -1,3 +1,6 @@
+### More info on LifeWiki: https://conwaylife.com/wiki/
+
+
 # Oscillator
 ![oscillator](https://github.com/user-attachments/assets/e9a4517e-dc7c-4875-96bc-3027eddb3d75)
 
