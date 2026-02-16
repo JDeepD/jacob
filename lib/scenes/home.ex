@@ -21,11 +21,22 @@ defmodule Jacob.Scene.Home do
     {3, 3} => :alive
   }
 
+  @diehard %{
+    {1, 2} => :alive,
+    {2, 2} => :alive,
+    {2, 3} => :alive,
+
+    {7, 3} => :alive,
+    {8, 3} => :alive,
+    {9, 3} => :alive,
+    {8, 1} => :alive
+  }
+
   @impl Scenic.Scene
   def init(scene, _param, _opts) do
-    :timer.send_interval(120, :tick)
+    :timer.send_interval(90, :tick)
 
-    initial_board = @oscillators
+    initial_board = @diehard
     scene =
       scene
       |> assign(board: initial_board)
